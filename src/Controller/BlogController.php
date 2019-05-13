@@ -30,15 +30,16 @@ class BlogController extends AbstractController
 
     public function show($article = ' ')
     {
-        if ($article == ' ') {
-            $slug = "L'article est vide";
-        } else {
+        if($article === ' '){
+            $slug = 'Article sans titre';
+        }
+        else if(preg_match('/[A-Z]/', $article) || preg_match('/_/', $article)){
+            throw $this->createNotFoundException('404 not found');
+        }
+        else{
             $slug = ucwords(str_replace('-', ' ', $article));
         }
-
-        return $this->render('blog/show.html.twig', [
-            'article' => $slug
-        ]);
+        return $this->render('blog/show.html.twig', ['articles' => $slug]);
     }
 }
 
