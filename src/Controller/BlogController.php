@@ -23,23 +23,16 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/blog/show/{article}",
-     *     name="blog_show"
-     * )
+     * @Route("/blog/show/{slug}",
+     * requirements={"slug"="[a-z0-9-]+"},
+     * defaults={"slug"="Article Sans Titre"},
+     * name="blog_article")
      */
-
-    public function show($article = ' ')
+    public function show($slug)
     {
-        if($article === ' '){
-            $slug = 'Article sans titre';
-        }
-        else if(preg_match('/[A-Z]/', $article) || preg_match('/_/', $article)){
-            throw $this->createNotFoundException('404 not found');
-        }
-        else{
-            $slug = ucwords(str_replace('-', ' ', $article));
-        }
-        return $this->render('blog/show.html.twig', ['articles' => $slug]);
+        $slug = str_replace('-', ' ', $slug);
+        $slug = ucfirst($slug);
+        return $this->render('blog/show.html.twig', ['slug' =>$slug]);
     }
 }
 
